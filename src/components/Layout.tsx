@@ -28,10 +28,7 @@ const Layout: React.FC<LayoutProps> = ({
         <Flex p={containerPadding} zIndex={1} alignItems="center">
           {!hideLogo && (
             <Link href="/">
-              <Image
-                src="/chimp_logo.svg"
-                height="50px"
-              />
+              <Text fontSize="1.5rem">Chimp Cards</Text>
             </Link>
           )}
           {headerContent}
