@@ -30,6 +30,8 @@ export function getActiveHardhatNetwork(hre: HardhatRuntimeEnvironment): EthNetw
 
 export type EnvironmentConfiguration = {
   mainContractAddress: string
+  chimpContractAddress: string
+  cardsContractAddress: string
 }
 
 export function loadLocalEnvironmentConfig(): Partial<Record<EthNetwork, EnvironmentConfiguration>> {
@@ -106,6 +108,19 @@ export function persistMainContractAddress(
   const newConfig: EnvironmentConfiguration = {
     ...existingConfig,
     mainContractAddress,
+  }
+
+  persistConfig(hre, newConfig)
+}
+
+export function persistCardsContractAddress(
+  hre: HardhatRuntimeEnvironment,
+  cardsContractAddress: string,
+) {
+  const existingConfig = getEnvironmentConfiguration(hre)
+  const newConfig: EnvironmentConfiguration = {
+    ...existingConfig,
+    cardsContractAddress,
   }
 
   persistConfig(hre, newConfig)

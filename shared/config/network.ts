@@ -5,6 +5,8 @@ import localNetworks from "./networks.local.json"
 
 export type ContractConfiguration = {
   mainContractAddress: string
+  cardsContractAddress: string
+  chimpContractAddress: string
 }
 
 export enum EthNetwork {

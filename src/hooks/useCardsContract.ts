@@ -1,6 +1,6 @@
 import { useMemo } from "react"
-import { CARDS_CONTRACT_ADDRESS } from "../../shared/config/base"
 import { AdventureCardsContract, AdventureCardsContract__factory } from "../../shared/contract_types"
+import { getNetworkConfig } from "../utils/network"
 import { useBackupProvider } from "./useBackupProvider"
 import { useWallet } from "./useWallet"
 
@@ -21,7 +21,7 @@ export function useCardsContract(): UseCardsContractValue {
   const mainContract = useMemo(
     () =>
       process.browser
-        ? AdventureCardsContract__factory.connect(CARDS_CONTRACT_ADDRESS, injectedProvider ?? provider)
+        ? AdventureCardsContract__factory.connect(getNetworkConfig().contractConfig.cardsContractAddress, injectedProvider ?? provider)
         : null,
     [provider, injectedProvider],
   )

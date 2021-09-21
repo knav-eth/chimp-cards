@@ -19,78 +19,85 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface CHIMPCardsInterface extends ethers.utils.Interface {
+interface CardInterface extends ethers.utils.Interface {
   functions: {
+    "MAX_MINT()": FunctionFragment;
+    "MAX_PER_ADDRESS()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "cardAvailable(uint256,uint256)": FunctionFragment;
-    "cardDataForToken(uint256)": FunctionFragment;
-    "chimpAvailable(uint256)": FunctionFragment;
-    "editionCount(bytes32)": FunctionFragment;
+    "freezeBaseURI()": FunctionFragment;
+    "frozen()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getCardTitle(uint256,uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(uint256,uint256,uint256)": FunctionFragment;
+    "mintPublic()": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
+    "ownerClaim(uint256)": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
-    "palette(uint256)": FunctionFragment;
+    "publicIssued()": FunctionFragment;
+    "publicMax()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setBaseURI(string)": FunctionFragment;
+    "setPublicMax(uint256)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
     "tokenOfOwnerByIndex(address,uint256)": FunctionFragment;
-    "tokenSVG(uint256)": FunctionFragment;
     "tokenURI(uint256)": FunctionFragment;
     "totalSupply()": FunctionFragment;
     "transferFrom(address,address,uint256)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
+  encodeFunctionData(functionFragment: "MAX_MINT", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "MAX_PER_ADDRESS",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "cardAvailable",
-    values: [BigNumberish, BigNumberish]
+    functionFragment: "freezeBaseURI",
+    values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "cardDataForToken",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "chimpAvailable",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "editionCount",
-    values: [BytesLike]
-  ): string;
+  encodeFunctionData(functionFragment: "frozen", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCardTitle",
+    values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
   ): string;
   encodeFunctionData(
-    functionFragment: "mint",
-    values: [BigNumberish, BigNumberish, BigNumberish]
+    functionFragment: "mintPublic",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "ownerClaim",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "ownerOf",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "palette",
-    values: [BigNumberish]
+    functionFragment: "publicIssued",
+    values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "publicMax", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -102,6 +109,11 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [string, boolean]
+  ): string;
+  encodeFunctionData(functionFragment: "setBaseURI", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "setPublicMax",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -115,10 +127,6 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "tokenOfOwnerByIndex",
     values: [string, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "tokenSVG",
-    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "tokenURI",
@@ -137,37 +145,40 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
     values: [string]
   ): string;
 
+  decodeFunctionResult(functionFragment: "MAX_MINT", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "MAX_PER_ADDRESS",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "cardAvailable",
+    functionFragment: "freezeBaseURI",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "cardDataForToken",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "chimpAvailable",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "editionCount",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "frozen", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCardTitle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mintPublic", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "ownerClaim", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "palette", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "publicIssued",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "publicMax", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -178,6 +189,11 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setPublicMax",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -193,7 +209,6 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
     functionFragment: "tokenOfOwnerByIndex",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "tokenSVG", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupply",
@@ -221,7 +236,7 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
-export class CHIMPCards extends BaseContract {
+export class Card extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -262,9 +277,13 @@ export class CHIMPCards extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: CHIMPCardsInterface;
+  interface: CardInterface;
 
   functions: {
+    MAX_MINT(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    MAX_PER_ADDRESS(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -273,38 +292,20 @@ export class CHIMPCards extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    cardAvailable(
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    freezeBaseURI(
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    cardDataForToken(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [
-        [BigNumber, BigNumber, BigNumber, BigNumber] & {
-          chimpId: BigNumber;
-          packId: BigNumber;
-          cardOffset: BigNumber;
-          edition: BigNumber;
-        }
-      ]
-    >;
-
-    chimpAvailable(
-      chimpId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    editionCount(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    frozen(overrides?: CallOverrides): Promise<[boolean]>;
 
     getApproved(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    getCardTitle(
+      tokenId: BigNumberish,
+      offset: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
@@ -314,10 +315,7 @@ export class CHIMPCards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[boolean]>;
 
-    mint(
-      chimpId: BigNumberish,
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
+    mintPublic(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -325,12 +323,19 @@ export class CHIMPCards extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
+    ownerClaim(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    palette(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+    publicIssued(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    publicMax(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -357,6 +362,16 @@ export class CHIMPCards extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setBaseURI(
+      baseURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setPublicMax(
+      _publicMax: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -374,11 +389,6 @@ export class CHIMPCards extends BaseContract {
       index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
-
-    tokenSVG(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
 
     tokenURI(
       tokenId: BigNumberish,
@@ -400,6 +410,10 @@ export class CHIMPCards extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  MAX_MINT(overrides?: CallOverrides): Promise<BigNumber>;
+
+  MAX_PER_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
+
   approve(
     to: string,
     tokenId: BigNumberish,
@@ -408,33 +422,20 @@ export class CHIMPCards extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  cardAvailable(
-    packId: BigNumberish,
-    cardOffset: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  freezeBaseURI(
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  cardDataForToken(
-    tokenId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber] & {
-      chimpId: BigNumber;
-      packId: BigNumber;
-      cardOffset: BigNumber;
-      edition: BigNumber;
-    }
-  >;
-
-  chimpAvailable(
-    chimpId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  editionCount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+  frozen(overrides?: CallOverrides): Promise<boolean>;
 
   getApproved(
     tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  getCardTitle(
+    tokenId: BigNumberish,
+    offset: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
 
@@ -444,10 +445,7 @@ export class CHIMPCards extends BaseContract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
-  mint(
-    chimpId: BigNumberish,
-    packId: BigNumberish,
-    cardOffset: BigNumberish,
+  mintPublic(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -455,9 +453,16 @@ export class CHIMPCards extends BaseContract {
 
   owner(overrides?: CallOverrides): Promise<string>;
 
+  ownerClaim(
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-  palette(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+  publicIssued(overrides?: CallOverrides): Promise<BigNumber>;
+
+  publicMax(overrides?: CallOverrides): Promise<BigNumber>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -484,6 +489,16 @@ export class CHIMPCards extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setBaseURI(
+    baseURI: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setPublicMax(
+    _publicMax: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -502,8 +517,6 @@ export class CHIMPCards extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  tokenSVG(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
-
   tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
   totalSupply(overrides?: CallOverrides): Promise<BigNumber>;
@@ -521,6 +534,10 @@ export class CHIMPCards extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    MAX_MINT(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_PER_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -529,36 +546,18 @@ export class CHIMPCards extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    cardAvailable(
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    freezeBaseURI(overrides?: CallOverrides): Promise<void>;
 
-    cardDataForToken(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber] & {
-        chimpId: BigNumber;
-        packId: BigNumber;
-        cardOffset: BigNumber;
-        edition: BigNumber;
-      }
-    >;
-
-    chimpAvailable(
-      chimpId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    editionCount(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    frozen(overrides?: CallOverrides): Promise<boolean>;
 
     getApproved(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    getCardTitle(
+      tokenId: BigNumberish,
+      offset: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
 
@@ -568,20 +567,19 @@ export class CHIMPCards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<boolean>;
 
-    mint(
-      chimpId: BigNumberish,
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    mintPublic(overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
+    ownerClaim(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
     ownerOf(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
-    palette(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+    publicIssued(overrides?: CallOverrides): Promise<BigNumber>;
+
+    publicMax(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -606,6 +604,13 @@ export class CHIMPCards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setBaseURI(baseURI: string, overrides?: CallOverrides): Promise<void>;
+
+    setPublicMax(
+      _publicMax: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -623,8 +628,6 @@ export class CHIMPCards extends BaseContract {
       index: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    tokenSVG(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
     tokenURI(tokenId: BigNumberish, overrides?: CallOverrides): Promise<string>;
 
@@ -681,6 +684,10 @@ export class CHIMPCards extends BaseContract {
   };
 
   estimateGas: {
+    MAX_MINT(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_PER_ADDRESS(overrides?: CallOverrides): Promise<BigNumber>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -689,29 +696,20 @@ export class CHIMPCards extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    cardAvailable(
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
-      overrides?: CallOverrides
+    freezeBaseURI(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    cardDataForToken(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    chimpAvailable(
-      chimpId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    editionCount(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    frozen(overrides?: CallOverrides): Promise<BigNumber>;
 
     getApproved(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getCardTitle(
+      tokenId: BigNumberish,
+      offset: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -721,10 +719,7 @@ export class CHIMPCards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    mint(
-      chimpId: BigNumberish,
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
+    mintPublic(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -732,12 +727,19 @@ export class CHIMPCards extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
+    ownerClaim(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    palette(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    publicIssued(overrides?: CallOverrides): Promise<BigNumber>;
+
+    publicMax(overrides?: CallOverrides): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -764,6 +766,16 @@ export class CHIMPCards extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setBaseURI(
+      baseURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setPublicMax(
+      _publicMax: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -779,11 +791,6 @@ export class CHIMPCards extends BaseContract {
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    tokenSVG(
-      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -808,6 +815,10 @@ export class CHIMPCards extends BaseContract {
   };
 
   populateTransaction: {
+    MAX_MINT(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    MAX_PER_ADDRESS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -819,29 +830,20 @@ export class CHIMPCards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    cardAvailable(
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
-      overrides?: CallOverrides
+    freezeBaseURI(
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    cardDataForToken(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    chimpAvailable(
-      chimpId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    editionCount(
-      arg0: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    frozen(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     getApproved(
       tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getCardTitle(
+      tokenId: BigNumberish,
+      offset: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -851,10 +853,7 @@ export class CHIMPCards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    mint(
-      chimpId: BigNumberish,
-      packId: BigNumberish,
-      cardOffset: BigNumberish,
+    mintPublic(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -862,15 +861,19 @@ export class CHIMPCards extends BaseContract {
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    ownerClaim(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     ownerOf(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    palette(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    publicIssued(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    publicMax(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -897,6 +900,16 @@ export class CHIMPCards extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    setBaseURI(
+      baseURI: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPublicMax(
+      _publicMax: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -912,11 +925,6 @@ export class CHIMPCards extends BaseContract {
     tokenOfOwnerByIndex(
       owner: string,
       index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    tokenSVG(
-      tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

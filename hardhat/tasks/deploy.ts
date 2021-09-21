@@ -1,8 +1,7 @@
 import "@nomiclabs/hardhat-ethers"
 import { task } from "hardhat/config"
-import { CARDS_CONTRACT_ADDRESS, CHIMP_CONTRACT_ADDRESS } from "../../shared/config/base"
 import { CHIMPCards__factory } from "../../shared/contract_types"
-import { persistMainContractAddress } from "../utils/contract"
+import { getEnvironmentConfiguration, persistMainContractAddress } from "../utils/contract"
 import { promptForGasPrice } from "../utils/gas"
 
 task("deploy", "Deploy main contract", async (taskArgs, hre) => {
@@ -10,11 +9,13 @@ task("deploy", "Deploy main contract", async (taskArgs, hre) => {
 
   const contractFactory = (await hre.ethers.getContractFactory("CHIMPCards")) as CHIMPCards__factory
 
+  const { mainContractAddress, chimpContractAddress } = getEnvironmentConfiguration(hre)
+
   const gasPrice = await promptForGasPrice(hre, contractFactory.signer)
-  const deploymentCost = await contractFactory.signer.estimateGas(contractFactory.getDeployTransaction(CHIMP_CONTRACT_ADDRESS, CARDS_CONTRACT_ADDRESS, { gasPrice }))
+  const deploymentCost = await contractFactory.signer.estimateGas(contractFactory.getDeployTransaction(chimpContractAddress, mainContractAddress, { gasPrice }))
   console.log("Estimated cost to deploy contract:", hre.ethers.utils.formatUnits(deploymentCost.mul(gasPrice), "ether"), "ETH")
 
-  const contract = await contractFactory.deploy(CHIMP_CONTRACT_ADDRESS, CARDS_CONTRACT_ADDRESS, { gasPrice })
+  const contract = await contractFactory.deploy(chimpContractAddress, mainContractAddress, { gasPrice })
   const deployed = await contract.deployed()
 
   persistMainContractAddress(hre, deployed.address)

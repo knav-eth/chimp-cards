@@ -1,8 +1,12 @@
 {
   "hardhat": {
-    "mainContractAddress": "0x67d46f7BB7fD2985ba447000f6adFd9a715Df258"
+    "mainContractAddress": "0x67d46f7BB7fD2985ba447000f6adFd9a715Df258",
+    "cardsContractAddress": "0x329fd5e0d9aad262b13ca07c87d001bec716ed39",
+    "chimpContractAddress": "0x63a2E70b9208e8285C9A95F322243186cd77087B"
   },
   "localhost": {
-    "mainContractAddress": "0x67d46f7BB7fD2985ba447000f6adFd9a715Df258"
+    "mainContractAddress": "0x67d46f7BB7fD2985ba447000f6adFd9a715Df258",
+    "cardsContractAddress": "0x329fd5e0d9aad262b13ca07c87d001bec716ed39",
+    "chimpContractAddress": "0x63a2E70b9208e8285C9A95F322243186cd77087B"
   }
 }

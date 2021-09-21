@@ -1,6 +1,6 @@
 import { useMemo } from "react"
-import { CHIMP_CONTRACT_ADDRESS } from "../../shared/config/base"
 import { CHIMP, CHIMP__factory } from "../../shared/contract_types"
+import { getNetworkConfig } from "../utils/network"
 import { useBackupProvider } from "./useBackupProvider"
 import { useWallet } from "./useWallet"
 
@@ -21,7 +21,7 @@ export function useCHIMPContract(): UseCHIMPContractValue {
   const mainContract = useMemo(
     () =>
       process.browser
-        ? CHIMP__factory.connect(CHIMP_CONTRACT_ADDRESS, injectedProvider ?? provider)
+        ? CHIMP__factory.connect(getNetworkConfig().contractConfig.chimpContractAddress, injectedProvider ?? provider)
         : null,
     [provider, injectedProvider],
   )
