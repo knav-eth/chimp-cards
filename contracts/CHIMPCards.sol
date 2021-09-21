@@ -6,6 +6,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
+interface CHIMP
+
 contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
     using Strings for uint256;
     using Strings for uint8;

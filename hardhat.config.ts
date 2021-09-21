@@ -39,7 +39,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       chainId: 1337,
       forking: {
-        url: "https://eth-rinkeby.alchemyapi.io/v2/YrP1Fc4E97C-ulLaIxDTkrb5bkMr4zO2",
+        url: "https://eth-mainnet.alchemyapi.io/v2/CqOTvpq7hLG3O_gw-pafnPA4r_U2n44u",
       },
       accounts: {
         mnemonic: MNEMONIC,
@@ -48,7 +48,7 @@ const config: HardhatUserConfig = {
     localhost: {
       url: "http://0.0.0.0:8545",
       forking: {
-        url: "https://eth-rinkeby.alchemyapi.io/v2/YrP1Fc4E97C-ulLaIxDTkrb5bkMr4zO2",
+        url: "https://eth-mainnet.alchemyapi.io/v2/CqOTvpq7hLG3O_gw-pafnPA4r_U2n44u",
       },
       accounts: {
         mnemonic: MNEMONIC,

@@ -36,6 +36,7 @@ export type EthNetworkConfig = {
   openSeaProjectSlug?: string
   openSeaBaseApiUrl: string
   chimpGraphUrl: string
+  adventureCardsGraphUrl: string
 }
 
 const localNetworkConfig: EthNetworkConfig = {
@@ -45,6 +46,7 @@ const localNetworkConfig: EthNetworkConfig = {
   contractConfig: localContractConfig.localhost,
   openSeaBaseApiUrl: "https://api.opensea.io",
   chimpGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp",
+  adventureCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/adventure-cards",
 }
 
 export const NETWORK_CONFIG: Record<EthNetwork, EthNetworkConfig> = {
@@ -60,9 +62,10 @@ export const NETWORK_CONFIG: Record<EthNetwork, EthNetworkConfig> = {
     blockExplorer: "https://etherscan.io",
     contractConfig: contractConfig.mainnet,
     openSeaBaseUrl: "https://opensea.io",
-    openSeaProjectSlug: "chimp-nft",
+    openSeaProjectSlug: "chimp-cards",
     openSeaBaseApiUrl: "https://api.opensea.io",
     chimpGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp",
+    adventureCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/adventure-cards",
   },
   rinkeby: {
     name: "rinkeby",
@@ -71,8 +74,9 @@ export const NETWORK_CONFIG: Record<EthNetwork, EthNetworkConfig> = {
     blockExplorer: "https://rinkeby.etherscan.io",
     contractConfig: contractConfig.rinkeby,
     openSeaBaseUrl: "https://testnets.opensea.io",
-    openSeaProjectSlug: "chimp-nft",
+    openSeaProjectSlug: "chimp-cards",
     openSeaBaseApiUrl: "https://testnets-api.opensea.io",
     chimpGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp",
+    adventureCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/adventure-cards",
   },
 }
