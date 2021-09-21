@@ -148,7 +148,7 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
         CardData memory cardData = tokenData[tokenId];
         CHIMPContract.ImageData memory imageData = chimpContract.imageDataForToken(cardData.chimpId);
 
-        string memory output = '<svg width="299" height="340" viewBox="0 0 315 358" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg"><style>.b { font-family: serif; font-weight: bold; font-size: 16px; } .e { font-family: serif; font-size: 12px; }</style><rect width="315" height="358" fill="#F6C104"/><rect x="8" y="8" width="299" height="342" rx="8" fill="black"/>';
+        string memory output = '<svg width="299" height="340" viewBox="0 0 315 358" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg"><style>.b { font-family: serif; font-weight: bold; font-size: 13px; } .e { font-family: serif; font-size: 11px; }</style><rect width="315" height="358" fill="#F6C104"/><rect x="8" y="8" width="299" height="342" rx="8" fill="black"/>';
 
         uint256 imagePixels;
         uint256 pixel = 0;
