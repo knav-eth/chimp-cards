@@ -49,9 +49,17 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
+      name: "AdventureCardsContract",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.AdventureCardsContract__factory>;
+    getContractFactory(
       name: "CHIMPCards",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.CHIMPCards__factory>;
+    getContractFactory(
+      name: "CHIMPContract",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.CHIMPContract__factory>;
     getContractFactory(
       name: "AdventureCards",
       signerOrOptions?: ethers.Signer | FactoryOptions

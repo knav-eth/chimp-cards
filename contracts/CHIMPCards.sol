@@ -6,23 +6,23 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-interface CHIMP
+interface CHIMPContract is IERC721 {
+    struct ImageData {
+        uint256[2] pixelChunks;
+        uint8[4] colors;
+        address author;
+    }
+
+    function imageDataForToken(uint256 tokenId) external view returns (ImageData memory);
+}
+
+interface AdventureCardsContract is IERC721 {
+    function getCardTitle(uint256 tokenId, uint256 offset) external view returns (string memory);
+}
 
 contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
     using Strings for uint256;
     using Strings for uint8;
-
-    uint256 public constant DIMENSION_SIZE = 16;
-    uint256 public constant PALETTE_SIZE = 4;
-    uint256 public constant PIXEL_CHUNKS = 2;
-
-    struct ImageData {
-        uint256[PIXEL_CHUNKS] pixelChunks;
-        uint8[PALETTE_SIZE] colors;
-        address author;
-    }
-
-    ImageData[] private tokenImages;
 
     string[52] public palette = [
     "#00237C",
@@ -79,55 +79,86 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
     "#FFFFFF"
     ];
 
-    constructor() ERC721("CHIMP", "CHIMP") Ownable() {}
+    CHIMPContract private chimpContract;
+    AdventureCardsContract private cardsContract;
+
+    mapping(uint256 => bool) private chimpRedemptions;
+    mapping(bytes32 => bool) private cardRedemptions;
+    mapping(bytes32 => uint256) public editionCount;
+
+    struct CardData {
+        uint256 chimpId;
+        uint256 packId;
+        uint256 cardOffset;
+        uint256 edition;
+    }
+
+    CardData[] private tokenData;
+
+    constructor(address _chimpContractAddress, address _cardsContractAddress) ERC721("CHIMPCards", "CHIMPCards") Ownable() {
+        cardsContract = AdventureCardsContract(_cardsContractAddress);
+        chimpContract = CHIMPContract(_chimpContractAddress);
+    }
 
     function withdraw() public onlyOwner {
         uint balance = address(this).balance;
         Address.sendValue(payable(owner()), balance);
     }
 
-    function mint(uint256[PIXEL_CHUNKS] memory pixelChunks, uint8[PALETTE_SIZE] memory colors) public payable nonReentrant {
-        require(msg.value >= 0.02 ether, "Incorrect payment amount");
+    function chimpAvailable(uint256 chimpId) public view returns (bool) {
+        return !chimpRedemptions[chimpId];
+    }
 
-        for (uint8 i = 0; i < colors.length; ++i) {
-            colors[i] = colors[i] % 52;
-        }
+    function cardAvailable(uint256 packId, uint256 cardOffset) public view returns (bool) {
+        bytes32 cardHash = keccak256(abi.encodePacked(packId, cardOffset));
+        return !cardRedemptions[cardHash];
+    }
+
+    function mint(uint256 chimpId, uint256 packId, uint256 cardOffset) public nonReentrant {
+        require(chimpRedemptions[chimpId] == false, "CHIMP already redeemed");
+        require(_msgSender() == chimpContract.ownerOf(chimpId), "CHIMP not owned");
+
+        require(_msgSender() == cardsContract.ownerOf(chimpId), "Adventure Card not owned");
+        bytes32 cardHash = keccak256(abi.encodePacked(packId, cardOffset));
+        require(cardRedemptions[cardHash] == false, "Adventure Card already redeemed");
+
+        string memory cardName = cardsContract.getCardTitle(packId, cardOffset);
+        bytes32 cardNameHash = keccak256(abi.encodePacked(cardName));
 
         uint256 tokenId = totalSupply();
 
-        ImageData memory data;
-        data.colors = colors;
-        data.pixelChunks = pixelChunks;
-        data.author = msg.sender;
-        tokenImages.push(data);
+        CardData memory data;
+        data.chimpId = chimpId;
+        data.packId = packId;
+        data.cardOffset = cardOffset;
+        editionCount[cardNameHash]++;
+        data.edition = editionCount[cardHash];
+
+        tokenData.push(data);
+
+        chimpRedemptions[chimpId] = true;
+        cardRedemptions[cardHash] = true;
 
         _safeMint(_msgSender(), tokenId);
     }
 
-    function imageDataForToken(uint256 tokenId) public view returns (ImageData memory) {
-        require(_exists(tokenId), "SVG query for nonexistent token");
-        return tokenImages[tokenId];
+    function cardDataForToken(uint256 tokenId) public view returns (CardData memory) {
+        require(_exists(tokenId));
+        return tokenData[tokenId];
     }
+
 
     function tokenSVG(uint256 tokenId) public view returns (string memory) {
         require(_exists(tokenId), "SVG query for nonexistent token");
-        ImageData memory imageData = tokenImages[tokenId];
+        CHIMPContract.ImageData memory imageData = chimpContract.imageDataForToken(tokenId);
 
-        string memory output = string(
-            abi.encodePacked(
-                '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" shape-rendering="crispEdges" viewBox="0 0 ',
-                DIMENSION_SIZE.toString(),
-                ' ',
-                DIMENSION_SIZE.toString(),
-                '">'
-            )
-        );
+        string memory output = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" shape-rendering="crispEdges" viewBox="0 0 16 16">';
 
         uint256 imagePixels;
         uint256 pixel = 0;
-        for (uint i = 0; i < (DIMENSION_SIZE ** 2); i++) {
+        for (uint i = 0; i < (16 ** 2); i++) {
             if ((i % 128) == 0) {
-                imagePixels = imageData.pixelChunks[PIXEL_CHUNKS - 1 - (i / 128)];
+                imagePixels = imageData.pixelChunks[2 - 1 - (i / 128)];
             }
 
             pixel = imagePixels & 3;
@@ -136,9 +167,9 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
                 abi.encodePacked(
                     output,
                     '<rect width="1.5" height="1.5" x="',
-                    (i % DIMENSION_SIZE).toString(),
+                    (i % 16).toString(),
                     '" y="',
-                    (i / DIMENSION_SIZE).toString(),
+                    (i / 16).toString(),
                     '" fill="',
                     palette[imageData.colors[pixel]],
                     '" />'
@@ -155,10 +186,11 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
         return output;
     }
 
+
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
-
         string memory output = tokenSVG(tokenId);
+
         output = string(abi.encodePacked(
                 'data:image/svg+xml;base64,',
                 Base64.encode(bytes(output))
@@ -168,9 +200,9 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
             bytes(
                 string(
                     abi.encodePacked(
-                        '{"name": "CHIMP #',
+                        '{"name": "CHIMP Card #',
                         tokenId.toString(),
-                        '", "description": "Pixel art generated using CHIMP: The On-Chain Image Manipulation Program.", "image": "',
+                        '", "description": "CHIMP based cards for the Adventure Cards project.", "image": "',
                         output,
                         '"}'
                     )
