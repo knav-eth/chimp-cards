@@ -18,7 +18,10 @@ export default function Home() {
     <Layout>
       <Box flex={1} width="full" maxWidth="1200px" marginX="auto">
 
-<Heading textAlign="center" mb={8} size="xl">Chimp + Adventure Card =  ✨Chimp🐵Card✨</Heading>
+<Flex alignItems="center" flexDir="column" mb={8}>
+<Heading textAlign="center" mb={4} size="xl">Chimp + Adventure Card =  ✨Chimp🐵Card✨</Heading>
+<Text textAlign="center" fontSize={"1.5rem"} maxW="800px" opacity={.8}>Create a visual representation of your Adventure Cards using <a href="http://www.chimp.lol" style={{ color: "#F6C104", textDecoration: "underline" }}>CHIMP</a> (The On-Chain Image Manipulation Program).</Text>
+</Flex>
 
 <Flex flexDir="column" justifyContent="center" mb={16} textAlign="center">
 {isConnected ? (
