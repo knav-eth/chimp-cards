@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Box, Button, Flex, Heading, Link, Text } from "@chakra-ui/react"
+import { useRouter } from "next/router"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import Confetti from "react-confetti"
 import { base64EncodeImageContent } from "../../shared/utils/metadata"
@@ -9,13 +10,17 @@ import { getNetworkConfig } from "../utils/network"
 
 export type SuccessDisplayProps = {
   tokenId: number
-  onDone: () => void
 }
 
 
-export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({ tokenId, onDone }) => {
+export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({ tokenId }) => {
+  const router = useRouter()
   const { mainContract } = useMainContract()
   const [svgContent, setSvgContent] = useState<string | null>(null)
+
+  const handleDone = useCallback(() => {
+    router.push("/")
+  }, [])
 
   const retrieveTokenAsset = useCallback(
     async (tokenId: number) => {
@@ -78,7 +83,7 @@ export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({ tokenId, onDone 
       )}
 
       <Box marginTop={8}>
-        <Button onClick={onDone}>
+        <Button onClick={handleDone}>
           Done
         </Button>
       </Box>

@@ -3,9 +3,11 @@ import { range } from "lodash"
 import React, { useCallback, useEffect, useState } from "react"
 import { getAllCHIMPsByOwner, SubgraphCHIMP } from "../../shared/clients/chimp-subgraph"
 import Layout from "../components/Layout"
+import { MintStep } from "../components/MintStep"
 import { SelectCardStep } from "../components/SelectCard"
 import { SelectChimpStep } from "../components/SelectChimp"
 import { SelectPackStep } from "../components/SelectPack"
+import { SuccessDisplay } from "../components/SuccessDisplay"
 import { useCardsContract } from "../hooks/useCardsContract"
 import { useMainContract } from "../hooks/useMainContract"
 import { useWallet } from "../hooks/useWallet"
@@ -16,6 +18,8 @@ export default function Home() {
   const [selectedChimp, setSelectedChimp] = useState<SubgraphCHIMP | null>(null)
   const [selectedCard, setSelectedCard] = useState<AdventureCard | null>(null)
   const [selectedPack, setSelectedPack] = useState<number | null>(null)
+
+  const [mintedId, setMintedId] = useState<number | null>(null)
 
   const { wallet } = useWallet()
   const { cardsContract } = useCardsContract()
@@ -75,9 +79,33 @@ export default function Home() {
       {selectedPack === null ? (
         <SelectPackStep onSelect={setSelectedPack} />
       ) : selectedCard === null ? (
-        <SelectCardStep adventureCards={packCards} onSelect={setSelectedCard} />
+        <SelectCardStep
+          adventureCards={packCards}
+          onSelect={setSelectedCard}
+          onCancel={() => {
+            setSelectedPack(null)
+          }}
+        />
+      ) : selectedChimp === null ? (
+        <SelectChimpStep
+          chimps={chimps}
+          onSelect={setSelectedChimp}
+          onCancel={() => {
+            setSelectedCard(null)
+          }}
+        />
+      ) : mintedId === null ? (
+        <MintStep
+          chimp={selectedChimp}
+          card={selectedCard}
+          packId={selectedPack}
+          onSuccess={setMintedId}
+          onCancel={() => {
+            setSelectedChimp(null)
+          }}
+        />
       ) : (
-        <SelectChimpStep chimps={chimps} onSelect={setSelectedChimp} />
+        <SuccessDisplay tokenId={mintedId} />
       )}
 
     </Layout>

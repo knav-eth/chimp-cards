@@ -7,10 +7,11 @@ import CHIMPGrid from "./CHIMPGrid"
 export type SelectChimpStepProps = {
   chimps: Array<CHIMPWithAvailability> | null
   onSelect: (chimp: SubgraphCHIMP) => void
+  onCancel: () => void
 }
 
 
-export const SelectChimpStep: React.FC<SelectChimpStepProps> = ({ chimps, onSelect }) => {
+export const SelectChimpStep: React.FC<SelectChimpStepProps> = ({ chimps, onSelect, onCancel }) => {
   return (
     <Box textAlign="center" width="full">
       <Heading as="h1" size="4xl" fontSize={["2xl", "3xl", "4xl"]} mb={4}>
@@ -35,6 +36,15 @@ export const SelectChimpStep: React.FC<SelectChimpStepProps> = ({ chimps, onSele
           <CHIMPGrid chimps={chimps} onClick={onSelect} />
         </Box>
       )}
+      <Box>
+        <Button
+          onClick={onCancel}
+          display="inline-block"
+          mr={2}
+        >
+          Cancel
+        </Button>
+      </Box>
     </Box>
   )
 }

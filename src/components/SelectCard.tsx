@@ -5,10 +5,11 @@ import { AdventureCard } from "../utils/card"
 export type SelectCardStepProps = {
   adventureCards: Array<AdventureCard> | null
   onSelect: (card: AdventureCard) => void
+  onCancel: () => void
 }
 
 
-export const SelectCardStep: React.FC<SelectCardStepProps> = ({ adventureCards, onSelect }) => {
+export const SelectCardStep: React.FC<SelectCardStepProps> = ({ adventureCards, onSelect, onCancel }) => {
   return (
     <Box textAlign="center" width="full">
       <Heading as="h1" size="4xl" fontSize={["2xl", "3xl", "4xl"]} mb={4}>
@@ -38,6 +39,15 @@ export const SelectCardStep: React.FC<SelectCardStepProps> = ({ adventureCards, 
             </Stack>
           </Box>
         )}
+      </Box>
+      <Box mt={6}>
+        <Button
+          onClick={onCancel}
+          display="inline-block"
+          mr={2}
+        >
+          Cancel
+        </Button>
       </Box>
     </Box>
   )
