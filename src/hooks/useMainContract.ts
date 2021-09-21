@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { CHIMP, CHIMP__factory } from "../../shared/contract_types"
+import { CHIMPCards, CHIMPCards__factory } from "../../shared/contract_types"
 import { getMainContractAddress } from "../utils/network"
 import { useBackupProvider } from "./useBackupProvider"
 import { useWallet } from "./useWallet"
@@ -10,7 +10,7 @@ export enum ContractConnectionType {
 }
 
 export type UseMainContractValue = {
-  mainContract: CHIMP
+  mainContract: CHIMPCards
   connectionType: ContractConnectionType
 }
 
@@ -21,7 +21,7 @@ export function useMainContract(): UseMainContractValue {
   const mainContract = useMemo(
     () =>
       process.browser
-        ? CHIMP__factory.connect(getMainContractAddress(), injectedProvider ?? provider)
+        ? CHIMPCards__factory.connect(getMainContractAddress(), injectedProvider ?? provider)
         : null,
     [provider, injectedProvider],
   )

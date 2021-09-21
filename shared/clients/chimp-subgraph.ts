@@ -78,3 +78,15 @@ export async function getAllTokens(): Promise<Array<SubgraphCHIMP>> {
   const data = await client.request<ListTokensResponse>(query)
   return data?.chimpimages
 }
+
+export async function getAllCHIMPsByOwner(address: string): Promise<Array<SubgraphCHIMP>> {
+  const query = gql`
+      query getAllPacksByOwner($owner: String!) {
+          chimpimages(where: { owner: $owner }) {
+              ${TOKEN_FRAGMENT}
+          }
+      }
+  `
+  const data = await client.request<ListTokensResponse>(query, { owner: address })
+  return data?.chimpimages
+}

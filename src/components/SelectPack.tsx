@@ -11,17 +11,15 @@ import {
   Text,
 } from "@chakra-ui/react"
 import React, { useCallback, useEffect, useState } from "react"
-import { SubgraphAdventureCardPack } from "../../shared/clients/adventure-cards-subgraph"
 import { useCardsContract } from "../hooks/useCardsContract"
 import { useWallet } from "../hooks/useWallet"
 
 export type SelectPackStepProps = {
-  adventurePacks: Array<SubgraphAdventureCardPack> | null
   onSelect: (packId: number) => void
 }
 
 
-export const SelectPackStep: React.FC<SelectPackStepProps> = ({ adventurePacks, onSelect }) => {
+export const SelectPackStep: React.FC<SelectPackStepProps> = ({ onSelect }) => {
   const { wallet } = useWallet()
   const { cardsContract } = useCardsContract()
   const [tokenId, setTokenId] = useState<number | null>(null)
