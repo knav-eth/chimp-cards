@@ -100,11 +100,6 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
         chimpContract = CHIMPContract(_chimpContractAddress);
     }
 
-    function withdraw() public onlyOwner {
-        uint balance = address(this).balance;
-        Address.sendValue(payable(owner()), balance);
-    }
-
     function chimpAvailable(uint256 chimpId) public view returns (bool) {
         return !chimpRedemptions[chimpId];
     }
