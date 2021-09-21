@@ -12,7 +12,7 @@ const PackCard: React.FC<PackCardProps> = ({ pack, containerProps }) => {
   return (
     <AspectRatio ratio={1}>
       <Flex justifyContent="center" alignItems="center" {...containerProps}>
-        <img src={svgData} alt={`Pack #${n.id}`} />
+        <img src={svgData} alt={`Pack #${pack.id}`} />
       </Flex>
     </AspectRatio>
   )
