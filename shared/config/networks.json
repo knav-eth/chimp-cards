@@ -5,7 +5,7 @@
     "chimpContractAddress": "0x63a2E70b9208e8285C9A95F322243186cd77087B"
   },
   "mainnet": {
-    "mainContractAddress": "0x63a2E70b9208e8285C9A95F322243186cd77087B",
+    "mainContractAddress": "0x16F6254189E38737C0Fdb40A46869559FF120f1C",
     "cardsContractAddress": "0x329fd5e0d9aad262b13ca07c87d001bec716ed39",
     "chimpContractAddress": "0x63a2E70b9208e8285C9A95F322243186cd77087B"
   }
