@@ -118,7 +118,7 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
         require(chimpRedemptions[chimpId] == false, "CHIMP already redeemed");
         require(_msgSender() == chimpContract.ownerOf(chimpId), "CHIMP not owned");
 
-        require(_msgSender() == cardsContract.ownerOf(chimpId), "Adventure Card not owned");
+        require(_msgSender() == cardsContract.ownerOf(packId), "Adventure Card not owned");
         bytes32 cardHash = keccak256(abi.encodePacked(packId, cardOffset));
         require(cardRedemptions[cardHash] == false, "Adventure Card already redeemed");
 
@@ -150,9 +150,10 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
 
     function tokenSVG(uint256 tokenId) public view returns (string memory) {
         require(_exists(tokenId), "SVG query for nonexistent token");
-        CHIMPContract.ImageData memory imageData = chimpContract.imageDataForToken(tokenId);
+        CardData memory cardData = tokenData[tokenId];
+        CHIMPContract.ImageData memory imageData = chimpContract.imageDataForToken(cardData.chimpId);
 
-        string memory output = '<svg xmlns="http://www.w3.org/2000/svg" version="1.1" shape-rendering="crispEdges" viewBox="0 0 16 16">';
+        string memory output = '<svg width="299" height="340" viewBox="0 0 315 358" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg"><style>.b { font-family: serif; font-weight: bold; font-size: 16px; } .e { font-family: serif; font-size: 12px; }</style><rect width="315" height="358" fill="#F6C104"/><rect x="8" y="8" width="299" height="342" rx="8" fill="black"/>';
 
         uint256 imagePixels;
         uint256 pixel = 0;
@@ -166,10 +167,10 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
             output = string(
                 abi.encodePacked(
                     output,
-                    '<rect width="1.5" height="1.5" x="',
-                    (i % 16).toString(),
+                    '<rect width="16.5" height="16.5" x="',
+                    (28 + (16 * (i % 16))).toString(),
                     '" y="',
-                    (i / 16).toString(),
+                    (28 + (16 * (i / 16))).toString(),
                     '" fill="',
                     palette[imageData.colors[pixel]],
                     '" />'
@@ -180,7 +181,11 @@ contract CHIMPCards is ERC721Enumerable, ReentrancyGuard, Ownable {
         output = string(
             abi.encodePacked(
                 output,
-                '</svg>'
+                '<text x="28" y="315" fill="#fff" class="b">',
+                cardsContract.getCardTitle(cardData.packId, cardData.cardOffset),
+                '</text><text x="28" y="332" fill="#fff" class="e">Edition #',
+                (cardData.edition + 1).toString(),
+                '</text></svg>'
             )
         );
         return output;

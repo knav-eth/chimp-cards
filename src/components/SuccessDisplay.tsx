@@ -20,7 +20,7 @@ export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({ tokenId }) => {
 
   const handleDone = useCallback(() => {
     router.push("/")
-  }, [])
+  }, [router])
 
   const retrieveTokenAsset = useCallback(
     async (tokenId: number) => {
@@ -62,7 +62,7 @@ export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({ tokenId }) => {
         gravity={0.3}
       />
       <Text>You have minted CHIMP #{tokenId}</Text>
-      <Box maxWidth="400px" width="90%" marginX="auto" marginY={3}>
+      <Box maxWidth="299px" width="90%" marginX="auto" marginY={3}>
         <Box
           backgroundColor="gray.800"
           borderWidth="4px"

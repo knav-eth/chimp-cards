@@ -32,7 +32,9 @@ const CHIMPGrid: React.FC<CHIMPGridProps> = ({ chimps, onClick }) => {
             variants={GRID_ANIMATION_VARIANTS}
             whileHover={isAvailable ? { scale: 1.05 } : undefined}
             onTap={() => {
-              onClick?.(chimp)
+              if (isAvailable) {
+                onClick?.(chimp)
+              }
             }}
           >
             <Tooltip label={"This CHIMP has already been used"} isDisabled={isAvailable}>

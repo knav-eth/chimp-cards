@@ -7,6 +7,7 @@ import { useWallet } from "../hooks/useWallet"
 import { AdventureCard } from "../utils/card"
 import { parseWalletError } from "../utils/error"
 import { getBlockExplorerUrl } from "../utils/network"
+import LazyCHIMPCard from "./CHIMPCard"
 
 export type MintStepProps = {
   packId: number
@@ -96,15 +97,35 @@ export const MintStep: React.FC<MintStepProps> = ({ packId, card, chimp, onCance
           </Link>
         )}
 
-        <Box
-          backgroundColor="gray.800"
-          borderWidth="4px"
-          borderColor="transparent"
-          borderStyle="solid"
-          width="full"
-          position="relative"
-        >
-          asdf
+        <Box maxWidth="299px" marginX="auto">
+          <Text my={4} fontWeight="semibold">
+            Selected Chimp
+          </Text>
+          <Box
+            backgroundColor="gray.800"
+            borderWidth="4px"
+            borderColor="transparent"
+            borderStyle="solid"
+            width="full"
+            position="relative"
+          >
+            <LazyCHIMPCard chimp={chimp} />
+          </Box>
+        </Box>
+        <Box maxWidth="299px" marginX="auto">
+          <Text my={4} fontWeight="semibold">
+            Selected Card
+          </Text>
+          <Box
+            backgroundColor="gray.800"
+            borderWidth="4px"
+            borderColor="transparent"
+            borderStyle="solid"
+            width="full"
+            position="relative"
+          >
+            {card.title}
+          </Box>
         </Box>
       </Box>
       <Box>
