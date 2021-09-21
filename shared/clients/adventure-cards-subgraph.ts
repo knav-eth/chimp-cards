@@ -64,17 +64,14 @@ export async function getTokensAfterId(mostRecentTokenId: number): Promise<Array
   return data?.adventureCardPacks
 }
 
-export async function getAllTokens(): Promise<Array<SubgraphAdventureCardPack>> {
+export async function getAllPacksByOwner(address: string): Promise<Array<SubgraphAdventureCardPack>> {
   const query = gql`
-      query getAllTokens {
-          adventureCardPacks(
-              orderBy: id
-              orderDirection: asc
-          ) {
+      query getAllPacksByOwner($owner: String!) {
+          adventureCardPacks(where: { owner: $owner }) {
               ${TOKEN_FRAGMENT}
           }
       }
   `
-  const data = await client.request<ListTokensResponse>(query)
+  const data = await client.request<ListTokensResponse>(query, { owner: address })
   return data?.adventureCardPacks
 }

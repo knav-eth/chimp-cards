@@ -12,7 +12,6 @@ import {
   BaseContract,
   ContractTransaction,
   Overrides,
-  PayableOverrides,
   CallOverrides,
 } from "ethers";
 import { BytesLike } from "@ethersproject/bytes";
@@ -22,15 +21,15 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface CHIMPCardsInterface extends ethers.utils.Interface {
   functions: {
-    "DIMENSION_SIZE()": FunctionFragment;
-    "PALETTE_SIZE()": FunctionFragment;
-    "PIXEL_CHUNKS()": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
+    "cardAvailable(uint256,uint256)": FunctionFragment;
+    "cardDataForToken(uint256)": FunctionFragment;
+    "chimpAvailable(uint256)": FunctionFragment;
+    "editionCount(bytes32)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "imageDataForToken(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
-    "mint(uint256[2],uint8[4])": FunctionFragment;
+    "mint(uint256,uint256,uint256)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -51,28 +50,28 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
   };
 
   encodeFunctionData(
-    functionFragment: "DIMENSION_SIZE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PALETTE_SIZE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "PIXEL_CHUNKS",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "approve",
     values: [string, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "balanceOf", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "getApproved",
+    functionFragment: "cardAvailable",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "cardDataForToken",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "imageDataForToken",
+    functionFragment: "chimpAvailable",
+    values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "editionCount",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getApproved",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -81,10 +80,7 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "mint",
-    values: [
-      [BigNumberish, BigNumberish],
-      [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
-    ]
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -143,26 +139,26 @@ interface CHIMPCardsInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "withdraw", values?: undefined): string;
 
-  decodeFunctionResult(
-    functionFragment: "DIMENSION_SIZE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "PALETTE_SIZE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "PIXEL_CHUNKS",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getApproved",
+    functionFragment: "cardAvailable",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "imageDataForToken",
+    functionFragment: "cardDataForToken",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "chimpAvailable",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "editionCount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getApproved",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -272,12 +268,6 @@ export class CHIMPCards extends BaseContract {
   interface: CHIMPCardsInterface;
 
   functions: {
-    DIMENSION_SIZE(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    PALETTE_SIZE(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    PIXEL_CHUNKS(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -286,23 +276,40 @@ export class CHIMPCards extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getApproved(
-      tokenId: BigNumberish,
+    cardAvailable(
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[string]>;
+    ): Promise<[boolean]>;
 
-    imageDataForToken(
+    cardDataForToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<
       [
-        [[BigNumber, BigNumber], [number, number, number, number], string] & {
-          pixelChunks: [BigNumber, BigNumber];
-          colors: [number, number, number, number];
-          author: string;
+        [BigNumber, BigNumber, BigNumber, BigNumber] & {
+          chimpId: BigNumber;
+          packId: BigNumber;
+          cardOffset: BigNumber;
+          edition: BigNumber;
         }
       ]
     >;
+
+    chimpAvailable(
+      chimpId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    editionCount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getApproved(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
 
     isApprovedForAll(
       owner: string,
@@ -311,9 +318,10 @@ export class CHIMPCards extends BaseContract {
     ): Promise<[boolean]>;
 
     mint(
-      pixelChunks: [BigNumberish, BigNumberish],
-      colors: [BigNumberish, BigNumberish, BigNumberish, BigNumberish],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      chimpId: BigNumberish,
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
@@ -399,12 +407,6 @@ export class CHIMPCards extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  DIMENSION_SIZE(overrides?: CallOverrides): Promise<BigNumber>;
-
-  PALETTE_SIZE(overrides?: CallOverrides): Promise<BigNumber>;
-
-  PIXEL_CHUNKS(overrides?: CallOverrides): Promise<BigNumber>;
-
   approve(
     to: string,
     tokenId: BigNumberish,
@@ -413,21 +415,35 @@ export class CHIMPCards extends BaseContract {
 
   balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+  cardAvailable(
+    packId: BigNumberish,
+    cardOffset: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  cardDataForToken(
+    tokenId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<
+    [BigNumber, BigNumber, BigNumber, BigNumber] & {
+      chimpId: BigNumber;
+      packId: BigNumber;
+      cardOffset: BigNumber;
+      edition: BigNumber;
+    }
+  >;
+
+  chimpAvailable(
+    chimpId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  editionCount(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
   getApproved(
     tokenId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<string>;
-
-  imageDataForToken(
-    tokenId: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<
-    [[BigNumber, BigNumber], [number, number, number, number], string] & {
-      pixelChunks: [BigNumber, BigNumber];
-      colors: [number, number, number, number];
-      author: string;
-    }
-  >;
 
   isApprovedForAll(
     owner: string,
@@ -436,9 +452,10 @@ export class CHIMPCards extends BaseContract {
   ): Promise<boolean>;
 
   mint(
-    pixelChunks: [BigNumberish, BigNumberish],
-    colors: [BigNumberish, BigNumberish, BigNumberish, BigNumberish],
-    overrides?: PayableOverrides & { from?: string | Promise<string> }
+    chimpId: BigNumberish,
+    packId: BigNumberish,
+    cardOffset: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
@@ -515,12 +532,6 @@ export class CHIMPCards extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    DIMENSION_SIZE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PALETTE_SIZE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PIXEL_CHUNKS(overrides?: CallOverrides): Promise<BigNumber>;
-
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -529,21 +540,38 @@ export class CHIMPCards extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
+    cardAvailable(
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    cardDataForToken(
+      tokenId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<
+      [BigNumber, BigNumber, BigNumber, BigNumber] & {
+        chimpId: BigNumber;
+        packId: BigNumber;
+        cardOffset: BigNumber;
+        edition: BigNumber;
+      }
+    >;
+
+    chimpAvailable(
+      chimpId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    editionCount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
-
-    imageDataForToken(
-      tokenId: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<
-      [[BigNumber, BigNumber], [number, number, number, number], string] & {
-        pixelChunks: [BigNumber, BigNumber];
-        colors: [number, number, number, number];
-        author: string;
-      }
-    >;
 
     isApprovedForAll(
       owner: string,
@@ -552,8 +580,9 @@ export class CHIMPCards extends BaseContract {
     ): Promise<boolean>;
 
     mint(
-      pixelChunks: [BigNumberish, BigNumberish],
-      colors: [BigNumberish, BigNumberish, BigNumberish, BigNumberish],
+      chimpId: BigNumberish,
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -665,12 +694,6 @@ export class CHIMPCards extends BaseContract {
   };
 
   estimateGas: {
-    DIMENSION_SIZE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PALETTE_SIZE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    PIXEL_CHUNKS(overrides?: CallOverrides): Promise<BigNumber>;
-
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -679,12 +702,28 @@ export class CHIMPCards extends BaseContract {
 
     balanceOf(owner: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getApproved(
+    cardAvailable(
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    cardDataForToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    imageDataForToken(
+    chimpAvailable(
+      chimpId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    editionCount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -696,9 +735,10 @@ export class CHIMPCards extends BaseContract {
     ): Promise<BigNumber>;
 
     mint(
-      pixelChunks: [BigNumberish, BigNumberish],
-      colors: [BigNumberish, BigNumberish, BigNumberish, BigNumberish],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      chimpId: BigNumberish,
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
@@ -785,12 +825,6 @@ export class CHIMPCards extends BaseContract {
   };
 
   populateTransaction: {
-    DIMENSION_SIZE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PALETTE_SIZE(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    PIXEL_CHUNKS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     approve(
       to: string,
       tokenId: BigNumberish,
@@ -802,12 +836,28 @@ export class CHIMPCards extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getApproved(
+    cardAvailable(
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    cardDataForToken(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    imageDataForToken(
+    chimpAvailable(
+      chimpId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    editionCount(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getApproved(
       tokenId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -819,9 +869,10 @@ export class CHIMPCards extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     mint(
-      pixelChunks: [BigNumberish, BigNumberish],
-      colors: [BigNumberish, BigNumberish, BigNumberish, BigNumberish],
-      overrides?: PayableOverrides & { from?: string | Promise<string> }
+      chimpId: BigNumberish,
+      packId: BigNumberish,
+      cardOffset: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;

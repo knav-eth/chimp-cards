@@ -1,6 +1,6 @@
 import { useMemo } from "react"
-import { CHIMPCards, CHIMPCards__factory } from "../../shared/contract_types"
-import { getMainContractAddress } from "../utils/network"
+import { CHIMP_CONTRACT_ADDRESS } from "../../shared/config/base"
+import { CHIMP, CHIMP__factory } from "../../shared/contract_types"
 import { useBackupProvider } from "./useBackupProvider"
 import { useWallet } from "./useWallet"
 
@@ -9,25 +9,25 @@ export enum ContractConnectionType {
   Fallback = 1,
 }
 
-export type UseMainContractValue = {
-  mainContract: CHIMPCards
+export type UseCHIMPContractValue = {
+  chimpContract: CHIMP
   connectionType: ContractConnectionType
 }
 
-export function useMainContract(): UseMainContractValue {
+export function useCHIMPContract(): UseCHIMPContractValue {
   const { provider } = useBackupProvider()
   const { wallet } = useWallet()
   const injectedProvider = wallet?.web3Provider
   const mainContract = useMemo(
     () =>
       process.browser
-        ? CHIMPCards__factory.connect(getMainContractAddress(), injectedProvider ?? provider)
+        ? CHIMP__factory.connect(CHIMP_CONTRACT_ADDRESS, injectedProvider ?? provider)
         : null,
     [provider, injectedProvider],
   )
 
   return {
-    mainContract: mainContract!,
+    chimpContract: mainContract!,
     connectionType: injectedProvider
       ? ContractConnectionType.Injected
       : ContractConnectionType.Fallback,
