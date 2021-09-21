@@ -9,13 +9,13 @@ task("deploy", "Deploy main contract", async (taskArgs, hre) => {
 
   const contractFactory = (await hre.ethers.getContractFactory("CHIMPCards")) as CHIMPCards__factory
 
-  const { mainContractAddress, chimpContractAddress } = getEnvironmentConfiguration(hre)
+  const { cardsContractAddress, chimpContractAddress } = getEnvironmentConfiguration(hre)
 
   const gasPrice = await promptForGasPrice(hre, contractFactory.signer)
-  const deploymentCost = await contractFactory.signer.estimateGas(contractFactory.getDeployTransaction(chimpContractAddress, mainContractAddress, { gasPrice }))
+  const deploymentCost = await contractFactory.signer.estimateGas(contractFactory.getDeployTransaction(chimpContractAddress, cardsContractAddress, { gasPrice }))
   console.log("Estimated cost to deploy contract:", hre.ethers.utils.formatUnits(deploymentCost.mul(gasPrice), "ether"), "ETH")
 
-  const contract = await contractFactory.deploy(chimpContractAddress, mainContractAddress, { gasPrice })
+  const contract = await contractFactory.deploy(chimpContractAddress, cardsContractAddress, { gasPrice })
   const deployed = await contract.deployed()
 
   persistMainContractAddress(hre, deployed.address)

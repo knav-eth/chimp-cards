@@ -61,7 +61,7 @@ export const SuccessDisplay: React.FC<SuccessDisplayProps> = ({ tokenId }) => {
         recycle={false}
         gravity={0.3}
       />
-      <Text>You have minted CHIMP #{tokenId}</Text>
+      <Text>You have minted CHIMP Card #{tokenId}</Text>
       <Box maxWidth="299px" width="90%" marginX="auto" marginY={3}>
         <Box
           backgroundColor="gray.800"
