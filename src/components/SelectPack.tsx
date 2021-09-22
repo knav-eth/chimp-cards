@@ -54,9 +54,6 @@ export const SelectPackStep: React.FC<SelectPackStepProps> = ({ onSelect }) => {
       <Heading as="h1" size="4xl" fontSize={["2xl", "3xl", "4xl"]} mb={4}>
         Select an Adventure Card Pack
       </Heading>
-      <Text>
-        Enter the ID of an Adventure Card Pack you own:
-      </Text>
       <Box paddingX={2} justifyContent="center" textAlign="center">
         {!userPacks ? (
           <Box marginTop={24}>
