@@ -38,6 +38,7 @@ export type EthNetworkConfig = {
   openSeaProjectSlug?: string
   openSeaBaseApiUrl: string
   chimpGraphUrl: string
+  chimpCardsGraphUrl: string
   adventureCardsGraphUrl: string
 }
 
@@ -48,6 +49,7 @@ const localNetworkConfig: EthNetworkConfig = {
   contractConfig: localContractConfig.localhost,
   openSeaBaseApiUrl: "https://api.opensea.io",
   chimpGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp",
+  chimpCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp-cards",
   adventureCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/adventure-cards",
 }
 
@@ -67,6 +69,7 @@ export const NETWORK_CONFIG: Record<EthNetwork, EthNetworkConfig> = {
     openSeaProjectSlug: "chimpcards",
     openSeaBaseApiUrl: "https://api.opensea.io",
     chimpGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp",
+    chimpCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp-cards",
     adventureCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/adventure-cards",
   },
   rinkeby: {
@@ -79,6 +82,7 @@ export const NETWORK_CONFIG: Record<EthNetwork, EthNetworkConfig> = {
     openSeaProjectSlug: "chimpcards",
     openSeaBaseApiUrl: "https://testnets-api.opensea.io",
     chimpGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp",
+    chimpCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/chimp-cards",
     adventureCardsGraphUrl: "https://api.thegraph.com/subgraphs/name/knav-eth/adventure-cards",
   },
 }
