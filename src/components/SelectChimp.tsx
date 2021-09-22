@@ -26,7 +26,7 @@ export const SelectChimpStep: React.FC<SelectChimpStepProps> = ({ chimps, onSele
           {!chimps.length && (
             <Box>
               <Text marginTop={16} marginBottom={8} color="whiteAlpha.700">
-                You do not own any Ns. You can mint one here.
+                You do not own any CHIMPs. You can mint one here.
               </Text>
               <Link href="https://chimp.lol">
                 <Button>Mint one now</Button>

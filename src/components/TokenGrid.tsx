@@ -1,15 +1,15 @@
 import { Box, Tooltip } from "@chakra-ui/react"
 import React from "react"
-import { SubgraphAdventureCardPack } from "../../shared/clients/adventure-cards-subgraph"
 import { GRID_ANIMATION_VARIANTS, MotionGrid, MotionGridItem } from "../utils/animation"
-import LazyPackCard from "./PackCard"
+import { TokenWithMetadata } from "../utils/types"
+import LazyTokenCard from "./PackCard"
 
-export type PackGridProps = {
-  packs: Array<SubgraphAdventureCardPack>
-  onClick?: (pack: SubgraphAdventureCardPack) => void
+export type TokenGridProps = {
+  tokens: Array<TokenWithMetadata>
+  onClick?: (token: TokenWithMetadata) => void
 }
 
-const PackGrid: React.FC<PackGridProps> = ({ packs, onClick }) => {
+const TokenGrid: React.FC<TokenGridProps> = ({ tokens, onClick }) => {
   return (
     <MotionGrid
       flex={1}
@@ -22,19 +22,19 @@ const PackGrid: React.FC<PackGridProps> = ({ packs, onClick }) => {
       initial={"hidden"}
       animate={"show"}
     >
-      {packs.map((pack) => {
+      {tokens.map((token) => {
         return (
           <MotionGridItem
-            key={pack.numericId}
+            key={token.id}
             display="flex"
             cursor="pointer"
             variants={GRID_ANIMATION_VARIANTS}
             whileHover={{ scale: 1.05 }}
             onTap={() => {
-              onClick?.(pack)
+              onClick?.(token)
             }}
           >
-            <Tooltip label={"This N has already been used"}>
+            <Tooltip label="This has already been redeemed." isDisabled={!token.isUsed}>
               <Box
                 backgroundColor="gray.800"
                 borderWidth="4px"
@@ -42,7 +42,7 @@ const PackGrid: React.FC<PackGridProps> = ({ packs, onClick }) => {
                 borderStyle="solid"
                 width="full"
               >
-                <LazyPackCard pack={pack} />
+                <LazyTokenCard token={token} />
               </Box>
             </Tooltip>
           </MotionGridItem>
@@ -52,4 +52,4 @@ const PackGrid: React.FC<PackGridProps> = ({ packs, onClick }) => {
   )
 }
 
-export default PackGrid
+export default TokenGrid

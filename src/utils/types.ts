@@ -1,3 +1,5 @@
+import { TokenMetadata } from "../../shared/utils/metadata"
+
 export function isNullOrUndefined<T>(value: T | undefined | null): value is null | undefined {
   return value === null || value === undefined
 }
@@ -11,4 +13,10 @@ export function getOrThrow<T>(value: T | null | undefined, errorMessage = "Unexp
     throw new Error(errorMessage)
   }
   return value
+}
+
+export type TokenWithMetadata = {
+  id: number
+  metadata: TokenMetadata
+  isUsed?: boolean
 }

@@ -1,7 +1,7 @@
 import { FlexProps } from "@chakra-ui/react"
-import { SubgraphAdventureCardPack } from "../../../shared/clients/adventure-cards-subgraph"
+import { TokenWithMetadata } from "../../utils/types"
 
-export type PackCardProps = {
-  pack: SubgraphAdventureCardPack
+export type TokenCardProps = {
+  token: TokenWithMetadata
   containerProps?: Partial<FlexProps>
 }

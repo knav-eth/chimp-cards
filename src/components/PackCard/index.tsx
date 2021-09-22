@@ -1,10 +1,10 @@
 import dynamic from "next/dynamic"
-import { PackCardProps } from "./props"
+import { TokenCardProps } from "./props"
 
-const DynamicComponentWithNoSSR = dynamic(() => import("./PackCard"), {
+const DynamicComponentWithNoSSR = dynamic(() => import("./TokenCard"), {
   ssr: false,
 })
 
-const LazyPackCard = (props: PackCardProps) => <DynamicComponentWithNoSSR {...props} />
+const LazyTokenCard = (props: TokenCardProps) => <DynamicComponentWithNoSSR {...props} />
 
-export default LazyPackCard
+export default LazyTokenCard
