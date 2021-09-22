@@ -1,4 +1,7 @@
-# CHIMP: On-Chain Image Manipulation Program
+# CHIMP Cards
+
+This project uses [CHIMP](https://chimp.lol/) images and [Adventure Cards](https://0xadventures.com/) to generate
+[CHIMP Cards](https://opensea.io/collection/chimpcards).
 
 ## Web app
 
