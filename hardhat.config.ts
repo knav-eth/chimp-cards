@@ -6,7 +6,7 @@ import { removeConsoleLog } from "hardhat-preprocessor"
 
 import { HardhatUserConfig } from "hardhat/config"
 import { loadTasks } from "./hardhat/utils/tasks"
-import { INFURA_ID } from "./shared/config/base"
+import { ALCHEMY_ID, INFURA_ID } from "./shared/config/base"
 
 loadTasks()
 
@@ -39,7 +39,7 @@ const config: HardhatUserConfig = {
     hardhat: {
       chainId: 1337,
       forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/CqOTvpq7hLG3O_gw-pafnPA4r_U2n44u",
+        url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_ID}`,
       },
       accounts: {
         mnemonic: MNEMONIC,
@@ -48,7 +48,7 @@ const config: HardhatUserConfig = {
     localhost: {
       url: "http://0.0.0.0:8545",
       forking: {
-        url: "https://eth-mainnet.alchemyapi.io/v2/CqOTvpq7hLG3O_gw-pafnPA4r_U2n44u",
+        url: `https://eth-rinkeby.alchemyapi.io/v2/${ALCHEMY_ID}`,
       },
       accounts: {
         mnemonic: MNEMONIC,
